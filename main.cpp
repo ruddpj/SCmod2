@@ -1,7 +1,16 @@
 #include <iostream>
 #include <NTL/vec_GF2.h>
+#include <NTL/GF2XFactoring.h>
 using namespace std;
 using namespace NTL;
+
+
+long get_linear_complexity(const vec_GF2& s) {
+    if (IsZero(s)) return 0;
+    GF2X f;
+    MinPolySeq(f, s, s.length()); // nájde minimálny polynóm postupnosti
+    return deg(f);    // vráti stupeň polynómu ako lineárnu zložitosť
+}
 
 void introduction() {
     cout << "Určenie sférickej zložitosti rádu 1 postupnosti mod 2" << endl;
