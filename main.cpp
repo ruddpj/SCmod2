@@ -1,35 +1,19 @@
 #include <iostream>
+#include <vector>
 #include <NTL/vec_GF2.h>
-#include <NTL/GF2XFactoring.h>
+#include <NTL/GF2X.h>
 using namespace std;
 using namespace NTL;
 
-
 long get_linear_complexity(const vec_GF2& s) {
-    if (IsZero(s)) return 0;
-    GF2X f;
-    MinPolySeq(f, s, s.length()); // nájde minimálny polynóm postupnosti
-    return deg(f);    // vráti stupeň polynómu ako lineárnu zložitosť
+    const long n = s.length();
+    if (n == 0) return 0;
+
+    const GF2X f = MinPolySeq(s, (n+1) / 2);
+    return deg(f);
 }
 
-void introduction() {
-    cout << "Určenie sférickej zložitosti rádu 1 postupnosti mod 2" << endl;
-    cout << "Autor: Boris Pekarčík, Rudolf Tisoň" << endl;
-    cout << endl << "Vstup je postupnosť; musí obsahovať iba znaky 0/1" << endl;
-    cout << "(napr. 0111001)" << endl << endl;
-}
-
-vec_GF2 input_sequence() {
-    string str;
-
-    cout << "Zadajte postupnosť: ";
-    cin >> str;
-
-    if (str.empty()) {
-        cout << endl << "Postupnosť nemôže byť prázdna" << endl;
-        return {};
-    }
-
+vec_GF2 input_sequence(const string &str) {
     vec_GF2 sequence;
     sequence.SetLength(static_cast<long>(str.size()));
     for (int i = 0; i < str.size(); i++) {
@@ -49,11 +33,38 @@ vec_GF2 input_sequence() {
 }
 
 int main() {
-    introduction();
+    cout << "Určenie sférickej zložitosti rádu 1 postupnosti mod 2" << endl;
+    cout << "Autor: Boris Pekarčík, Rudolf Tisoň" << endl;
+    cout << endl << "Vstup je postupnosť; musí obsahovať iba znaky 0/1" << endl;
+    cout << "(napr. 0111001)" << endl << endl;
 
-    const vec_GF2 sequence = input_sequence();
-    if (sequence.length() == 0) {
-        return 1;
+    while (true) {
+        string str;
+        cout << "Zadajte postupnosť (alebo \'q\' ak chcete skončiť): ";
+        cin >> str;
+
+        if (str == "q") break;
+
+        if (str.empty()) {
+            cout << endl << "Postupnosť nemôže byť prázdna" << endl;
+            return 1;
+        }
+
+        vec_GF2 sequence = input_sequence(str);
+
+        long min_complexity = get_linear_complexity(sequence); // Výpočet lineárnej zložitosti pôvodnej postupnosti
+        for (int i = 0; i < sequence.length(); i++) {   // Výpočet pre postupnosti s_i = !s_i
+            sequence[i] = 1 - sequence[i];
+            long complexity = get_linear_complexity(sequence);
+
+            if (complexity < min_complexity) {      // Porovnanie s najmenšou aktuálnou zložitosťou
+                min_complexity = complexity;
+            }
+
+            sequence[i] = 1 - sequence[i];
+        }
+
+        cout << "Sférická zložitosť LC(s) = " << min_complexity << endl << endl;
     }
 
     return 0;
