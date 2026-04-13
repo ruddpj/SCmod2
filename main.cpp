@@ -9,15 +9,17 @@ long get_linear_complexity(const vec_GF2& s) {
     const long n = s.length();
     if (n == 0) return 0;
 
-    const GF2X f = MinPolySeq(s, (n+1) / 2);
+    const GF2X f = MinPolySeq(s, n / 2);
     return deg(f);
 }
 
 vec_GF2 input_sequence(const string &str) {
     vec_GF2 sequence;
-    sequence.SetLength(static_cast<long>(str.size()));
-    for (int i = 0; i < str.size(); i++) {
-        const char c = str[i];
+    const long length = static_cast<long>(str.size());
+    sequence.SetLength(length * 2);
+
+    for (int i = 0; i < length * 2; i++) {
+        const char c = str[i % length];
         const int x = c - '0';
 
         if (x != 0 && x != 1) {
@@ -35,7 +37,7 @@ vec_GF2 input_sequence(const string &str) {
 int main() {
     cout << "Určenie sférickej zložitosti rádu 1 postupnosti mod 2" << endl;
     cout << "Autor: Boris Pekarčík, Rudolf Tisoň" << endl;
-    cout << endl << "Vstup je postupnosť; musí obsahovať iba znaky 0/1" << endl;
+    cout << endl << "Vstup je postupnosť; musí obsahovať iba znaky 0/1 a byť celá perióda bez predperiódy." << endl;
     cout << "(napr. 0111001)" << endl << endl;
 
     while (true) {
