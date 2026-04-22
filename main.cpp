@@ -77,9 +77,10 @@ int main() {
 
     cout << "Princip fungovania:" << endl;
     cout << "   1. Vypocet linearnej zlozitosti LC zadanej postupnosti S pomocou Berlekamp-Massey algoritmu." << endl;
-    cout << "   2. Vypocet linearnej zlozitosti LC_i postupnosti S_i, kde S_i = S a i-ty prvok S_i(i) = S(i) + 1," << endl;
-    cout << "       i patri {0, 1, ..., n - 1}, n je dlzka zadanej postupnosti." << endl;
-    cout << "   3. Vypocet sferickej zlozitosti SC postupnosti S, kde SC(S) = min{LC, LC_0, LC_1, ..., LC_(n-1)}" << endl;
+    cout << "   2. Pre kazde i z {0, 1, ..., n-1} sa vytvori postupnost S_i zhodna so S," << endl;
+    cout << "      az na i-ty prvok, kde S_i[i] = S[i] XOR 1 (prehodenie bitu)." << endl;
+    cout << "      Nasledne sa vypocita linearnu zlozitost LC_i pre kazdu takuto postupnost S_i." << endl;
+    cout << "   3. Sferickа zlozitost je SC(S) = min{ LC, LC_0, LC_1, ..., LC_(n-1) }" << endl;
 
     cout << endl << "Vstup je postupnost; musi obsahovat iba znaky 0/1 (napr. 0111001)." << endl;
 
